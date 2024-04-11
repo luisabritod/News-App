@@ -1,8 +1,10 @@
 import 'package:bookmark/consts/consts.dart';
+import 'package:bookmark/screens/screens.dart';
 import 'package:bookmark/services/services.dart';
 import 'package:bookmark/widgets/widgets.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ArticlesWidget extends StatelessWidget {
   const ArticlesWidget({super.key});
@@ -16,7 +18,9 @@ class ArticlesWidget extends StatelessWidget {
       child: Material(
         color: Theme.of(context).cardColor,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, NewsDetailsScreen.routeName);
+          },
           child: Stack(
             children: [
               Container(
@@ -77,23 +81,36 @@ class ArticlesWidget extends StatelessWidget {
                             ],
                           ),
                           const VerticalSpacing(5),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.link,
-                                size: 16,
-                                color: buttonColor,
-                              ),
-                              const HorizontalSpacing(10),
-                              Expanded(
-                                child: Text(
-                                  'data ' * 8,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: smallTextStyle,
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: const NewDetailsWebView(),
+                                  inheritTheme: true,
+                                  ctx: context,
                                 ),
-                              ),
-                            ],
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.link,
+                                  size: 16,
+                                  color: buttonColor,
+                                ),
+                                const HorizontalSpacing(10),
+                                Expanded(
+                                  child: Text(
+                                    'data ' * 8,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: smallTextStyle,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

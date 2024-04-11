@@ -1,5 +1,8 @@
+import 'package:bookmark/screens/screens.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:bookmark/consts/consts.dart';
 import 'package:bookmark/services/services.dart';
@@ -40,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final themeState = Provider.of<DarkThemeProvider>(context);
     final Color labelColor = Utils(context).getColor;
     final Color buttonColor = Utils(context).getButtonColor;
+    Size size = Utils(context).getScreenSize;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -64,7 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(
               Icons.search,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: const SearchScreen(),
+                    inheritTheme: true,
+                    ctx: context,
+                  ));
+            },
           )
         ],
       ),
@@ -185,15 +198,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
             newsTipe == NewsType.topTrending
-                ? Container()
+                ? SizedBox(
+                    height: size.height * 0.6,
+                    child: Swiper(
+                      autoplayDelay: 8000,
+                      viewportFraction: 0.4,
+                      itemWidth: size.width * 0.9,
+                      layout: SwiperLayout.STACK,
+                      itemCount: 5,
+                      itemBuilder: (context, index) {
+                        return const TopTrending();
+                      },
+                    ),
+                  )
                 : Expanded(
                     child: ListView.builder(
-                      itemBuilder: (ctx, index) {
-                        return const LoadingWidget();
+                      itemBuilder: (context, index) {
+                        return const ArticlesWidget();
                       },
-                      itemCount: 20,
+                      itemCount: 10,
                     ),
                   ),
+            // const LoadingWidget(),
           ],
         ),
       ),

@@ -1,10 +1,12 @@
 import 'package:bookmark/consts/consts.dart';
 import 'package:bookmark/provider/provider.dart';
+import 'package:bookmark/screens/screens.dart';
 import 'package:bookmark/services/services.dart';
 import 'package:bookmark/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -55,16 +57,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
           const VerticalSpacing(20),
           ListTileWidget(
-            themeState: themeState,
+            color: color,
             label: 'Home',
             icon: IconlyBold.home,
             function: () {},
           ),
           ListTileWidget(
-            themeState: themeState,
+            color: color,
             label: 'Bookmark',
             icon: IconlyBold.bookmark,
-            function: () {},
+            function: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: const BookmarkPage(),
+                    inheritTheme: true,
+                    ctx: context,
+                  ));
+            },
           ),
           const VerticalSpacing(20),
           const Divider(),

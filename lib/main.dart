@@ -47,6 +47,10 @@ class _MyAppState extends State<MyApp> {
             title: 'Bookmark',
             theme: Styles.themeData(themeProvider.getDarkTheme, context),
             home: const HomeScreen(),
+            routes: {
+              NewsDetailsScreen.routeName: (context) =>
+                  const NewsDetailsScreen(),
+            },
           );
         },
       ),
