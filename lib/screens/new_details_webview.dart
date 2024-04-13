@@ -1,25 +1,30 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:bookmark/consts/consts.dart';
 import 'package:bookmark/provider/provider.dart';
 import 'package:bookmark/services/services.dart';
 import 'package:bookmark/widgets/widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class NewDetailsWebView extends StatefulWidget {
-  const NewDetailsWebView({super.key});
+  const NewDetailsWebView({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+  final String url;
 
   @override
   State<NewDetailsWebView> createState() => _NewDetailsWebViewState();
 }
 
 class _NewDetailsWebViewState extends State<NewDetailsWebView> {
-  final url = 'https://www.google.com';
-
   late WebViewController controller;
 
   @override
@@ -27,7 +32,7 @@ class _NewDetailsWebViewState extends State<NewDetailsWebView> {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.disabled)
       ..enableZoom(true)
-      ..loadRequest(Uri.parse(url));
+      ..loadRequest(Uri.parse(widget.url));
     super.initState();
   }
 
@@ -40,7 +45,7 @@ class _NewDetailsWebViewState extends State<NewDetailsWebView> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'URL',
+          widget.url,
           style: GoogleFonts.roboto(
             textStyle: TextStyle(
               color: labelColor,
@@ -128,8 +133,7 @@ class _NewDetailsWebViewState extends State<NewDetailsWebView> {
                 icon: Icons.share,
                 function: () async {
                   try {
-                    Share.share('https://www.google.com',
-                        subject: 'Look what a made');
+                    Share.share(widget.url, subject: 'Look what a made');
                   } catch (err) {
                     GlobalMethods.errorDialog(
                         errorMessage: err.toString(), context: context);
@@ -141,8 +145,8 @@ class _NewDetailsWebViewState extends State<NewDetailsWebView> {
                 label: 'Open in brownse',
                 icon: Icons.open_in_browser,
                 function: () async {
-                  if (!await launchUrl(Uri.parse(url))) {
-                    log('Could not launch $url' as num);
+                  if (!await launchUrl(Uri.parse(widget.url))) {
+                    log('Could not launch url' as num);
                   }
                 },
                 color: Utils(context).getButtonColor,

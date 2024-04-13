@@ -1,12 +1,18 @@
-import 'package:bookmark/screens/screens.dart';
-import 'package:bookmark/services/services.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
+import 'package:bookmark/screens/screens.dart';
+import 'package:bookmark/services/services.dart';
+
 class TopTrending extends StatelessWidget {
-  const TopTrending({super.key});
+  const TopTrending({
+    Key? key,
+    required this.url,
+  }) : super(key: key);
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +62,9 @@ class TopTrending extends StatelessWidget {
                         context,
                         PageTransition(
                           type: PageTransitionType.rightToLeft,
-                          child: const NewDetailsWebView(),
+                          child: NewDetailsWebView(
+                            url: url,
+                          ),
                           inheritTheme: true,
                           ctx: context,
                         ),

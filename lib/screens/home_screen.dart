@@ -1,3 +1,5 @@
+import 'package:bookmark/models/models.dart';
+import 'package:bookmark/provider/provider.dart';
 import 'package:bookmark/screens/screens.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:bookmark/consts/consts.dart';
 import 'package:bookmark/services/services.dart';
 import 'package:bookmark/widgets/widgets.dart';
-import '../provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var newsTipe = NewsType.allNews;
   int currentPageIndex = 0;
   String sortBy = SortByType.publishedAt.name;
+
   List<DropdownMenuItem<String>> get dropDownItems {
     List<DropdownMenuItem<String>> menuItem = [
       DropdownMenuItem(
@@ -44,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final Color labelColor = Utils(context).getColor;
     final Color buttonColor = Utils(context).getButtonColor;
     Size size = Utils(context).getScreenSize;
+    final newsProvider = Provider.of<NewsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -191,34 +194,65 @@ class _HomeScreenState extends State<HomeScreen> {
                           dropdownColor: Theme.of(context).cardColor,
                           value: sortBy,
                           items: dropDownItems,
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            setState(() {
+                              sortBy = value!;
+                            });
+                          },
                         ),
                       ),
                       const VerticalSpacing(15),
                     ],
                   ),
-            newsTipe == NewsType.topTrending
-                ? SizedBox(
-                    height: size.height * 0.6,
-                    child: Swiper(
-                      autoplayDelay: 8000,
-                      viewportFraction: 0.4,
-                      itemWidth: size.width * 0.9,
-                      layout: SwiperLayout.STACK,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return const TopTrending();
-                      },
+            FutureBuilder<List<NewsModel>>(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingWidget();
+                } else if (snapshot.hasError) {
+                  return Expanded(
+                    child: EmptyWidget(
+                      message: 'An error occurred ${snapshot.error}',
+                      imagePath: 'assets/images/no_news.png',
                     ),
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return const ArticlesWidget();
-                      },
-                      itemCount: 10,
+                  );
+                } else if (snapshot.data == null) {
+                  return const Expanded(
+                    child: EmptyWidget(
+                      message: 'No news found',
+                      imagePath: 'assets/images/no_news.png',
                     ),
-                  ),
+                  );
+                }
+                return newsTipe == NewsType.topTrending
+                    ? SizedBox(
+                        height: size.height * 0.6,
+                        child: Swiper(
+                          autoplayDelay: 8000,
+                          viewportFraction: 0.4,
+                          itemWidth: size.width * 0.9,
+                          layout: SwiperLayout.STACK,
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                            return TopTrending(
+                              url: snapshot.data![index].url,
+                            );
+                          },
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            return ChangeNotifierProvider.value(
+                                value: snapshot.data![index],
+                                child: const ArticlesWidget());
+                          },
+                          itemCount: snapshot.data!.length,
+                        ),
+                      );
+              },
+              future: newsProvider.fetchAllNews(
+                  page: currentPageIndex + 1, sortBy: sortBy),
+            )
             // const LoadingWidget(),
           ],
         ),
