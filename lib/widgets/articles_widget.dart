@@ -59,11 +59,14 @@ class ArticlesWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: FancyShimmerImage(
-                        height: size.height * 0.12,
-                        width: size.height * 0.12,
-                        boxFit: BoxFit.fill,
-                        imageUrl: newsModelProvider.imageUrl,
+                      child: Hero(
+                        tag: newsModelProvider.publishedAt,
+                        child: FancyShimmerImage(
+                          height: size.height * 0.12,
+                          width: size.height * 0.12,
+                          boxFit: BoxFit.fill,
+                          imageUrl: newsModelProvider.imageUrl,
+                        ),
                       ),
                     ),
                     const HorizontalSpacing(10),

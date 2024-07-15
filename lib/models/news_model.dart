@@ -44,7 +44,7 @@ class NewsModel with ChangeNotifier {
       title: json["title"] ?? "",
       description: description,
       url: json["url"] ?? "",
-      imageUrl: json["urlToImage"] ?? "",
+      imageUrl: json["urlToImage"] ?? "assets/images/empty_image.png",
       publishedAt: json["publishedAt"] ?? "",
       content: content,
       dateToShow: dateToShow,

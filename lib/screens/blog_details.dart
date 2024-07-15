@@ -75,7 +75,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   padding: const EdgeInsets.only(bottom: 25),
                   child: FancyShimmerImage(
                     boxFit: BoxFit.fill,
-                    errorWidget: Image.asset('assets/images/empty_image.png'),
+                    errorWidget: Image.asset(
+                      'assets/images/empty_image.png',
+                      fit: BoxFit.fitWidth,
+                    ),
                     imageUrl: currentNews.imageUrl,
                   ),
                 ),

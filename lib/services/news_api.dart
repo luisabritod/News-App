@@ -13,12 +13,40 @@ class NewsApiServices {
       "v2/everything",
       {
         "q": "bitcoin",
-        "pageSize": "5",
+        "pageSize": "20",
         "page": page.toString(),
         "sortBy": sortBy,
         // "domains": "bbc.co.uk,teccrunch.com,engadget.com"
         // "domains": "teccrunch.com",
         // "apiKey": API_KEY,
+      },
+    );
+    var response = await http.get(
+      uri,
+      headers: {
+        "X-Api-Key": API_KEY,
+      },
+    );
+    // print('response body:${response.body}');
+    // var response = await http.get(url);
+    Map data = jsonDecode(response.body);
+    List newsTempList = [];
+    for (var v in data["articles"]) {
+      newsTempList.add(v);
+      // newsTempList.add(NewsModel.fromJson(v));
+      // print(v.length.toString());
+    }
+    return NewsModel.newsFromSnapshot(newsTempList);
+  }
+
+  static Future<List<NewsModel>> searchNews({required String query}) async {
+    var uri = Uri.https(
+      BASEURL,
+      "v2/everything",
+      {
+        "q": query,
+        "pageSize": "20",
+        "domains": "teccrunch.com",
       },
     );
     var response = await http.get(

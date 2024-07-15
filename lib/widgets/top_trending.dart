@@ -18,6 +18,7 @@ class TopTrending extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
     final Color color = Utils(context).getColor;
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Material(

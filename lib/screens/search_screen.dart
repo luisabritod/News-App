@@ -1,4 +1,5 @@
 import 'package:bookmark/consts/consts.dart';
+import 'package:bookmark/models/models.dart';
 import 'package:bookmark/provider/provider.dart';
 import 'package:bookmark/services/services.dart';
 import 'package:bookmark/widgets/widgets.dart';
@@ -24,6 +25,9 @@ class _SearchScreenState extends State<SearchScreen> {
     focusNode = FocusNode();
   }
 
+  List<NewsModel>? searchList = [];
+  bool isSearching = false;
+
   @override
   void dispose() {
     if (mounted) {
@@ -37,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final Color color = Utils(context).getColor;
     final themeState = Provider.of<DarkThemeProvider>(context);
+    final searchProvider = Provider.of<NewsProvider>(context);
 
     return Container(
       color: themeState.getDarkTheme ? darkScaffoldColor : lightScaffoldColor,
@@ -68,7 +73,15 @@ class _SearchScreenState extends State<SearchScreen> {
                           autofocus: true,
                           textInputAction: TextInputAction.search,
                           keyboardType: TextInputType.text,
-                          onEditingComplete: () {},
+                          onEditingComplete: () async {
+                            searchList =
+                                await searchProvider.searchNewsProvider(
+                              query: _searchController.text,
+                            );
+                            isSearching = true;
+                            focusNode.unfocus();
+                            setState(() {});
+                          },
                           decoration: InputDecoration(
                             contentPadding:
                                 const EdgeInsets.symmetric(vertical: 10),
@@ -96,40 +109,41 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 const VerticalSpacing(20),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MasonryGridView.count(
-                      itemCount: searchKeywords.length,
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          child: Container(
-                            margin: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: color),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(
-                                  searchKeywords[index],
+                if (!isSearching && searchList!.isEmpty)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MasonryGridView.count(
+                        itemCount: searchKeywords.length,
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            child: Container(
+                              margin: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: color),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    searchKeywords[index],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const EmptyWidget(
-                  imagePath: 'assets/images/search.png',
-                  message: 'Ops! No results found.',
-                )
+                // const EmptyWidget(
+                //   imagePath: 'assets/images/search.png',
+                //   message: 'Ops! No results found.',
+                // )
               ],
             ),
           ),
