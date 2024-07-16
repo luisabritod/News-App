@@ -13,8 +13,10 @@ Todas as tecnologias utilizadas foram:
 
 # Final Result 🔥 
 
-<img src="assets\images\final_results\light.png" alt="Light Version"/> 
-<img src="assets\images\final_results\dark.png" alt="Dark Version"/> 
+<p align="center">
+    <img src="assets\images\final_results\light.png" alt="Light Version" width="45%"/> 
+    <img src="assets\images\final_results\dark.png" alt="Dark Version" width="45%"/> 
+</p>
 
 ## Starting 
 
