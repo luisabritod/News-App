@@ -21,9 +21,8 @@ Todas as tecnologias utilizadas foram:
 ## Starting 
 
 Para usar o projeto, siga os passos abaixo:
-1. Clone o repositório;
-2. Primeiro, clone o repositório para o seu ambiente local. Abra um terminal e execute o seguinte comando: git clone https://github.com/luisabritod/News-App.git;
-3. Navegue até o diretório do projeto;
-4. Instale as dependências com o comando `flutter pub get`;
-5. Configure um dispositivo emulador ou conecte um dispositivo físico;
-6. Execute o projeto com o comando: `flutter run`.
+1. Clone o repositório para o seu ambiente local. Abra um terminal e execute o seguinte comando: git clone https://github.com/luisabritod/News-App.git;
+2. Navegue até o diretório do projeto;
+3. Instale as dependências com o comando `flutter pub get`;
+4. Configure um dispositivo emulador ou conecte um dispositivo físico;
+5. Execute o projeto com o comando: `flutter run`.
