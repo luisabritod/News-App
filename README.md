@@ -1,4 +1,4 @@
-# BookMark - FLutter
+# BookMark - Flutter
 
 Aplicativo feito com Flutter e NewsAPI 
 
